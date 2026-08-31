@@ -222,3 +222,5 @@ django.core.exceptions.ImproperlyConfigured: Cannot import 'api'. Check that 'ac
 Exactamente: ahora el error cambió y ya sabemos qué está pasando. 👍
 
 Tu aplicación antes se llamaba api y la renombraste a academic, pero Django todavía tiene una referencia interna a api.
+
+perdon profe no me dio el tiempo :c
