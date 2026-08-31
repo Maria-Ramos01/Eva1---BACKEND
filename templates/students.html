@@ -1,0 +1,235 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}
+Estudiantes | AcademicApp
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-title">
+
+    <h2>👨‍🎓 Estudiantes</h2>
+
+    <p>
+        Listado de estudiantes registrados en el sistema.
+    </p>
+
+</div>
+
+
+<div class="card academic-card">
+
+    <div class="card-header">
+        Listado de Estudiantes
+    </div>
+
+    <div class="card-body">
+
+
+        <!-- Carga -->
+
+        <div
+            id="loadingStudents"
+            class="text-center py-4"
+        >
+
+            <div class="spinner-border text-primary"></div>
+
+            <p class="mt-2">
+                Cargando estudiantes...
+            </p>
+
+        </div>
+
+
+        <!-- Error -->
+
+        <div
+            id="errorStudents"
+            class="alert alert-danger d-none"
+        >
+
+            No fue posible obtener los estudiantes desde la API.
+
+        </div>
+
+
+        <!-- Tabla -->
+
+        <div class="table-responsive">
+
+            <table
+                id="studentsTable"
+                class="table table-hover align-middle d-none"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Nombre completo</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="studentsBody">
+
+                    <!-- JavaScript agrega los estudiantes -->
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+    /*
+    ===========================================
+    CONSULTAR ESTUDIANTES DESDE LA API
+    ===========================================
+    */
+
+    async function cargarEstudiantes() {
+
+
+        const loading =
+            document.getElementById("loadingStudents");
+
+        const error =
+            document.getElementById("errorStudents");
+
+        const table =
+            document.getElementById("studentsTable");
+
+        const tbody =
+            document.getElementById("studentsBody");
+
+
+        try {
+
+
+            /*
+            Realizamos la petición al endpoint
+            de estudiantes.
+            */
+
+            const response =
+                await fetch("/api/students/");
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Error HTTP: " + response.status
+                );
+
+            }
+
+
+            // Convertimos JSON a JavaScript
+
+            const data =
+                await response.json();
+
+
+            tbody.innerHTML = "";
+
+
+            /*
+            Compatible con API paginada
+            y sin paginación.
+            */
+
+            const students =
+                data.results || data;
+
+
+            students.forEach(student => {
+
+
+                const row =
+                    document.createElement("tr");
+
+
+                const fullName =
+                    `${student.first_name} ${student.last_name}`;
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <span class="student-id">
+                            ${student.id}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${student.first_name}
+                    </td>
+
+                    <td>
+                        ${student.last_name}
+                    </td>
+
+                    <td class="fw-semibold">
+                        ${fullName}
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(row);
+
+            });
+
+
+            loading.classList.add("d-none");
+
+            table.classList.remove("d-none");
+
+
+        }
+
+        catch (err) {
+
+
+            console.error(
+                "Error obteniendo estudiantes:",
+                err
+            );
+
+
+            loading.classList.add("d-none");
+
+            error.classList.remove("d-none");
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        cargarEstudiantes
+    );
+
+</script>
+
+{% endblock %}

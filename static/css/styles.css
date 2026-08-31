@@ -1,0 +1,280 @@
+/* =========================================
+   VARIABLES DE COLORES
+========================================= */
+
+:root {
+
+    --azul-oscuro: #0a2540;
+    --azul-principal: #1363df;
+    --azul-secundario: #3a86ff;
+    --azul-claro: #eaf2ff;
+    --azul-muy-claro: #f4f8ff;
+
+    --blanco: #ffffff;
+
+    --gris-texto: #495057;
+    --gris-borde: #dee2e6;
+
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+
+    background-color: var(--azul-muy-claro);
+
+    color: var(--gris-texto);
+
+    min-height: 100vh;
+
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar-academica {
+
+    background-color: var(--azul-oscuro);
+
+    padding: 15px 0;
+
+}
+
+
+.navbar-brand {
+
+    font-size: 1.4rem;
+
+}
+
+
+.navbar-academica .nav-link {
+
+    color: rgba(255, 255, 255, 0.85);
+
+    margin-left: 10px;
+
+    transition: 0.2s;
+
+}
+
+
+.navbar-academica .nav-link:hover {
+
+    color: var(--blanco);
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.academic-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--azul-principal),
+            var(--azul-secundario)
+        );
+
+    color: var(--blanco);
+
+    padding: 55px 20px;
+
+}
+
+
+.academic-header h1 {
+
+    font-size: 2.3rem;
+
+}
+
+
+/* =========================================
+   TITULOS
+========================================= */
+
+.page-title {
+
+    margin-bottom: 25px;
+
+}
+
+
+.page-title h2 {
+
+    color: var(--azul-oscuro);
+
+    font-weight: 700;
+
+}
+
+
+.page-title p {
+
+    color: #6c757d;
+
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.academic-card {
+
+    border: none;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 20px
+        rgba(10, 37, 64, 0.08);
+
+}
+
+
+.academic-card .card-header {
+
+    background-color: var(--azul-principal);
+
+    color: var(--blanco);
+
+    padding: 16px 20px;
+
+    font-size: 1.1rem;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================
+   TABLAS
+========================================= */
+
+.table {
+
+    margin-bottom: 0;
+
+}
+
+
+.table thead th {
+
+    background-color: var(--azul-claro);
+
+    color: var(--azul-oscuro);
+
+    border-bottom: 2px solid var(--azul-principal);
+
+    padding: 14px;
+
+}
+
+
+.table tbody td {
+
+    padding: 14px;
+
+    vertical-align: middle;
+
+}
+
+
+.table tbody tr {
+
+    transition: background-color 0.2s;
+
+}
+
+
+.table tbody tr:hover {
+
+    background-color: var(--azul-muy-claro);
+
+}
+
+
+/* =========================================
+   ID CURSOS / ESTUDIANTES
+========================================= */
+
+.course-id,
+.student-id {
+
+    display: inline-block;
+
+    min-width: 35px;
+
+    padding: 5px 8px;
+
+    background-color: var(--azul-claro);
+
+    color: var(--azul-principal);
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer-academico {
+
+    background-color: var(--azul-oscuro);
+
+    color: rgba(255, 255, 255, 0.8);
+
+    padding: 25px 0;
+
+    margin-top: 70px;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .academic-header {
+
+        padding: 35px 15px;
+
+    }
+
+
+    .academic-header h1 {
+
+        font-size: 1.8rem;
+
+    }
+
+
+    .page-title h2 {
+
+        font-size: 1.6rem;
+
+    }
+
+}

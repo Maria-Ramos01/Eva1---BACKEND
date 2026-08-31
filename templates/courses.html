@@ -1,0 +1,256 @@
+{% extends 'academic/base.html' %}
+
+{% block title %}
+Cursos | AcademicApp
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-title">
+
+    <h2>📚 Cursos</h2>
+
+    <p>
+        Listado de cursos disponibles y profesores asignados.
+    </p>
+
+</div>
+
+
+<div class="card academic-card">
+
+    <div class="card-header">
+        Listado de Cursos
+    </div>
+
+    <div class="card-body">
+
+        <!-- Mensaje de carga -->
+        <div
+            id="loadingCourses"
+            class="text-center py-4"
+        >
+            <div class="spinner-border text-primary"></div>
+
+            <p class="mt-2">
+                Cargando cursos...
+            </p>
+        </div>
+
+
+        <!-- Mensaje de error -->
+        <div
+            id="errorCourses"
+            class="alert alert-danger d-none"
+        >
+            No fue posible obtener los cursos desde la API.
+        </div>
+
+
+        <!-- Tabla -->
+        <div class="table-responsive">
+
+            <table
+                id="coursesTable"
+                class="table table-hover align-middle d-none"
+            >
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Curso</th>
+                        <th>Profesor</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="coursesBody">
+
+                    <!-- JavaScript insertará los cursos aquí -->
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+    /*
+    =================================================
+    OBTENER LOS CURSOS DESDE DJANGO REST FRAMEWORK
+    =================================================
+    */
+
+    async function cargarCursos() {
+
+        const loading = document.getElementById("loadingCourses");
+        const error = document.getElementById("errorCourses");
+        const table = document.getElementById("coursesTable");
+        const tbody = document.getElementById("coursesBody");
+
+
+        try {
+
+            /*
+            fetch realiza una petición GET asíncrona
+            al endpoint creado en Django REST Framework.
+            */
+
+            const response = await fetch("/api/courses/");
+
+
+            // Comprobamos si el servidor respondió correctamente
+            if (!response.ok) {
+
+                throw new Error(
+                    "Error HTTP: " + response.status
+                );
+
+            }
+
+
+            /*
+            Convertimos la respuesta JSON
+            enviada por DRF a un objeto JavaScript.
+            */
+
+            const data = await response.json();
+
+
+            // Limpiamos la tabla antes de agregar datos
+            tbody.innerHTML = "";
+
+
+            /*
+            Algunos ViewSet de DRF pueden utilizar paginación.
+
+            Sin paginación:
+            [
+                {...},
+                {...}
+            ]
+
+            Con paginación:
+            {
+                "count": 10,
+                "results": [...]
+            }
+            */
+
+            const courses = data.results || data;
+
+
+            courses.forEach(course => {
+
+                const row = document.createElement("tr");
+
+
+                /*
+                Dependiendo de tu serializer el profesor podría
+                venir como:
+
+                teacher_name
+                teacher
+                teacher.first_name
+                */
+
+                let teacherName = "Sin profesor asignado";
+
+
+                if (course.teacher_name) {
+
+                    teacherName = course.teacher_name;
+
+                }
+
+                else if (
+                    course.teacher &&
+                    typeof course.teacher === "object"
+                ) {
+
+                    teacherName =
+                        `${course.teacher.first_name || ""}
+                         ${course.teacher.last_name || ""}`;
+
+                }
+
+                else if (course.teacher) {
+
+                    teacherName = course.teacher;
+
+                }
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <span class="course-id">
+                            ${course.id}
+                        </span>
+                    </td>
+
+                    <td class="fw-semibold">
+                        ${course.name}
+                    </td>
+
+                    <td>
+                        ${teacherName}
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(row);
+
+            });
+
+
+            // Ocultar carga y mostrar tabla
+            loading.classList.add("d-none");
+            table.classList.remove("d-none");
+
+
+        }
+
+        catch (err) {
+
+            console.error(
+                "Error obteniendo cursos:",
+                err
+            );
+
+
+            loading.classList.add("d-none");
+            error.classList.remove("d-none");
+
+        }
+
+    }
+
+
+    /*
+    Cuando el documento HTML termina de cargar,
+    ejecutamos cargarCursos().
+    */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        cargarCursos
+    );
+
+</script>
+
+{% endblock %}
